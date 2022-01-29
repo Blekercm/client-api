@@ -17,7 +17,7 @@ const createClient = async (req, res, next) => {
 
 const getAllClient = async (req, res, next) => {
   try {
-    const allTasks = await pool.query("select a.name, a.surname, (select avg(AGE(b.date_birth)) from client b) as age from client a");
+    const allTasks = await pool.query("select a.name, a.surname, a.date_birth, (select avg(AGE(b.date_birth)) from client b) as age from client a");
     res.json(allTasks.rows);
   } catch (error) {
     next(error);
@@ -27,7 +27,7 @@ const getAllClient = async (req, res, next) => {
 const getClient = async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query("select a.name, a.surname, (select avg(AGE(b.date_birth)) from client b) as age from client a WHERE a.id = $1", [id]);
+    const result = await pool.query("select a.name, a.surname, a.date_birth, (select avg(AGE(b.date_birth)) from client b) as age from client a WHERE a.id = $1", [id]);
 
     if (result.rows.length === 0)
       return res.status(404).json({ message: "Task not found" });
